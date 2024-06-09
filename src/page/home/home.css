@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Kanit&display=swap");
+.task-input,
+.date-picker,
+.task-tag {
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  padding: 8px;
+  font-size: 14px;
+  width: 100%;
+}
+.task-container {
+  max-height: 660px;
+  overflow-y: auto;
+}
+
+.add-task-button {
+  background-color: #198754;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.task-card {
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.task-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-text {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.task-meta {
+  font-size: 14px;
+  color: #6c757d;
+}
+.gap-buttom {
+  gap: 10px;
+}
+.custom-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-checkbox:checked::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 11px;
+  border: solid #000;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.task-title.completed {
+  text-decoration: line-through;
+  color: #808080;
+}
+.nav-tabs .nav-link {
+  font-family: "Kanit", cursive;
+  font-size: 1.2em;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link.active {
+  color: #000000;
+}
+
+.nav-tabs .nav-link::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #198754;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-tabs .nav-link:hover::before,
+.nav-tabs .nav-link.active::before {
+  visibility: visible;
+  width: 100%;
+}
+
+.modal-dialog {
+  position: relative !important;
+  top: 25% !important;
+}
+.validate-star {
+  color: red;
+}
