@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "../style/datepicker-custom.css";
 
 interface AddTaskModalProps {
   show: boolean;
@@ -68,7 +69,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
                   selected={dueDate}
                   onChange={(date: Date) => setDueDate(date)}
                   dateFormat="MMMM d, yyyy"
-                  className="form-control date-picker"
+                  className="minimal-datepicker"
                   minDate={new Date()}
                 />
               </Form.Group>

@@ -50,16 +50,14 @@ const TaskCard: React.FC<TaskCardProps> = ({
         </div>
         <div className="d-flex align-items-center justify-content-end gap-buttom">
           <Button
-            variant="secondary"
+            variant="success"
             className="mr-2"
             onClick={() => handleEditTask(index)}
           >
             <Pencil />
-            <span className="ml-1">Edit</span>
           </Button>
           <Button variant="danger" onClick={() => handleDeleteTask(index)}>
             <Trash />
-            <span className="ml-1">Delete</span>
           </Button>
         </div>
       </Card.Body>
