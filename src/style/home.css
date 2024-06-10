@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Kanit&display=swap");
+
 .task-input,
 .date-picker,
 .task-tag {
@@ -8,6 +9,7 @@
   font-size: 14px;
   width: 100%;
 }
+
 .task-container {
   max-height: 660px;
   overflow-y: auto;
@@ -24,6 +26,7 @@
 }
 
 .task-card {
+  font-family: "Kanit", cursive;
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
@@ -34,6 +37,7 @@
 }
 
 .task-text {
+  font-family: "Kanit", cursive;
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 6px;
@@ -43,9 +47,11 @@
   font-size: 14px;
   color: #6c757d;
 }
+
 .gap-buttom {
   gap: 10px;
 }
+
 .custom-checkbox {
   appearance: none;
   -webkit-appearance: none;
@@ -70,10 +76,12 @@
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
+
 .task-title.completed {
   text-decoration: line-through;
   color: #808080;
 }
+
 .nav-tabs .nav-link {
   font-family: "Kanit", cursive;
   font-size: 1.2em;
@@ -105,9 +113,15 @@
 }
 
 .modal-dialog {
+  font-family: "Kanit", cursive;
   position: relative !important;
   top: 25% !important;
 }
+
 .validate-star {
   color: red;
+}
+
+.btnSS {
+  width: 100%;
 }

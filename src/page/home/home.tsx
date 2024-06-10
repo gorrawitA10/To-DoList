@@ -1,23 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Card,
-  Modal,
-  Nav,
-} from "react-bootstrap";
+import { Container, Row, Col, Nav, Button } from "react-bootstrap";
 import {
   DragDropContext,
-  Droppable,
   Draggable,
+  Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { Pencil, Trash } from "react-bootstrap-icons";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Task } from "../../model/TaskModel";
@@ -25,7 +13,11 @@ import {
   saveTasksToLocalStorage,
   getTasksFromLocalStorage,
 } from "../../service/TaskService";
-import "./home.css";
+import TaskCard from "../../components/TaskCard";
+import AddTaskModal from "../../components/AddTaskModal";
+import EditTaskModal from "../../components/EditTaskModal";
+import TaskDetailsModal from "../../components/TaskDetailsModal";
+import "../../style/home.css";
 
 const MainContent: React.FC = () => {
   const [taskTitle, setTaskTitle] = useState<string>("");
@@ -170,6 +162,7 @@ const MainContent: React.FC = () => {
     setSelectedTask(filteredTasks[index]);
     setShowTaskModal(true);
   };
+
   const validateTask = () => {
     if (!taskTitle.trim()) {
       MySwal.fire({
@@ -194,7 +187,7 @@ const MainContent: React.FC = () => {
     <Container>
       <Row className="justify-content-md-center mt-5">
         <Col md={8}>
-          <h1 className="text-center mb-4">To - Do List</h1>
+          <h1 className="text-center mb-4">To-Do List</h1>
           <Nav variant="tabs" defaultActiveKey="all">
             <Nav.Item>
               <Nav.Link eventKey="all" onClick={() => setFilter("all")}>
@@ -247,57 +240,20 @@ const MainContent: React.FC = () => {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          <Card className="mb-3">
-                            <Card.Body>
-                              <div className="d-flex align-items-center gap-buttom ">
-                                <input
-                                  type="checkbox"
-                                  className="custom-checkbox mr-3"
-                                  checked={task.completed}
-                                  onChange={() => handleToggleComplete(index)}
-                                />
-                                <Card.Title
-                                  className={`task-title mr-2 ${
-                                    task.completed ? "completed" : ""
-                                  }`}
-                                >
-                                  {task.title}
-                                </Card.Title>
-                              </div>
-                              <div onClick={() => handleCardClick(index)}>
-                                <Card.Text className="task-content">
-                                  {task.content.length > 200
-                                    ? task.content.substring(0, 200) + "..."
-                                    : task.content}
-                                </Card.Text>
-                                <Card.Text>
-                                  <br />
-                                  <small className="text-muted">
-                                    Due: {task.dueDate}
-                                  </small>
-                                  <br />
-                                </Card.Text>
-                              </div>
-
-                              <div className="d-flex align-items-center justify-content-end gap-buttom">
-                                <Button
-                                  variant="secondary"
-                                  className="mr-2"
-                                  onClick={() => handleEditTask(index)}
-                                >
-                                  <Pencil />
-                                  <span className="ml-1">Edit</span>
-                                </Button>
-                                <Button
-                                  variant="danger"
-                                  onClick={() => handleDeleteTask(index)}
-                                >
-                                  <Trash />
-                                  <span className="ml-1">Delete</span>
-                                </Button>
-                              </div>
-                            </Card.Body>
-                          </Card>
+                          <TaskCard
+                            task={task}
+                            index={index}
+                            handleToggleComplete={() =>
+                              handleToggleComplete(tasks.indexOf(task))
+                            }
+                            handleEditTask={() =>
+                              handleEditTask(tasks.indexOf(task))
+                            }
+                            handleDeleteTask={() =>
+                              handleDeleteTask(tasks.indexOf(task))
+                            }
+                            handleCardClick={() => handleCardClick(index)}
+                          />
                         </div>
                       )}
                     </Draggable>
@@ -309,138 +265,35 @@ const MainContent: React.FC = () => {
           </DragDropContext>
         </Col>
       </Row>
-
-      <Modal
+      <AddTaskModal
         show={showAddModal}
-        onHide={() => setShowAddModal(false)}
-        className="position-e"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Add Task</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formBasicTaskTitle">
-              <Form.Label className="sr-only">
-                Title <span className="validate-star">*</span>
-              </Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter task title"
-                value={taskTitle}
-                onChange={(e) => setTaskTitle(e.target.value)}
-                className="task-input"
-              />
-            </Form.Group>
-            <Form.Group controlId="formBasicTaskContent" className="mt-3">
-              <Form.Label className="sr-only">
-                Description <span className="validate-star">*</span>
-              </Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="Enter task Description"
-                value={taskContent}
-                onChange={(e) => setTaskContent(e.target.value)}
-                className="task-input"
-              />
-            </Form.Group>
-            <Row className="mt-3">
-              <Col>
-                <Form.Group controlId="formDueDate">
-                  <Form.Label className="mb-1">
-                    Due <span className="validate-star">*</span>
-                  </Form.Label>
-                  <DatePicker
-                    selected={dueDate}
-                    onChange={(date: Date) => setDueDate(date)}
-                    dateFormat="MMMM d, yyyy"
-                    className="form-control date-picker"
-                    minDate={new Date()}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+        handleClose={() => setShowAddModal(false)}
+        taskTitle={taskTitle}
+        taskContent={taskContent}
+        dueDate={dueDate}
+        setTaskTitle={setTaskTitle}
+        setTaskContent={setTaskContent}
+        setDueDate={setDueDate}
+        handleAddTask={handleAddTask}
+      />
 
-            <Button
-              variant="primary"
-              onClick={handleAddTask}
-              className="mt-3 add-task-button w-100"
-            >
-              Add Task
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      <EditTaskModal
+        show={showEditModal}
+        handleClose={() => setShowEditModal(false)}
+        editTaskTitle={editTaskTitle}
+        editTaskContent={editTaskContent}
+        editTaskDueDate={editTaskDueDate}
+        setEditTaskTitle={setEditTaskTitle}
+        setEditTaskContent={setEditTaskContent}
+        setEditTaskDueDate={setEditTaskDueDate}
+        handleSaveEditTask={handleSaveEditTask}
+      />
 
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Task</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Group controlId="formEditTaskTitle">
-            <Form.Label className="sr-only">
-              Title<span className="validate-star">*</span>
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter task title"
-              value={editTaskTitle}
-              onChange={(e) => setEditTaskTitle(e.target.value)}
-              className="task-input"
-            />
-          </Form.Group>
-          <Form.Group controlId="formEditTaskContent" className="mt-3">
-            <Form.Label className="sr-only">
-              Description<span className="validate-star">*</span>
-            </Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              placeholder="Enter task content"
-              value={editTaskContent}
-              onChange={(e) => setEditTaskContent(e.target.value)}
-              className="task-input"
-            />
-          </Form.Group>
-          <Form.Group controlId="formEditDueDate" className="mt-3">
-            <Row>
-              <Form.Label>
-                Due <span className="validate-star">*</span>
-              </Form.Label>
-              <DatePicker
-                selected={editTaskDueDate}
-                onChange={(date: Date) => setEditTaskDueDate(date)}
-                dateFormat="MMMM d, yyyy"
-                className="form-control date-picker"
-                minDate={new Date()}
-              />
-            </Row>
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="success" onClick={handleSaveEditTask}>
-            Save
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal show={showTaskModal} onHide={() => setShowTaskModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Task Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ maxHeight: "400px", overflowY: "auto" }}>
-          {selectedTask && (
-            <>
-              <h5>{selectedTask.title}</h5>
-              <p style={{ overflowWrap: "break-word" }}>
-                {selectedTask.content}
-              </p>
-              <p>Due Date: {selectedTask.dueDate}</p>
-            </>
-          )}
-        </Modal.Body>
-      </Modal>
+      <TaskDetailsModal
+        show={showTaskModal}
+        handleClose={() => setShowTaskModal(false)}
+        selectedTask={selectedTask}
+      />
     </Container>
   );
 };
